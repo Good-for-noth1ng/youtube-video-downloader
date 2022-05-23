@@ -7,6 +7,7 @@ import socket
 from urllib import parse
 from urllib.error import URLError
 from urllib.request import Request, urlopen
+from downloader.downloader_components.error import RegexMatchError, MaxRetriesError
 
 logger = logging.getLogger(__name__)
 default_range_size = 9437184
@@ -42,6 +43,7 @@ def post(url, extra_headers=None, data=None, timeout=socket._GLOBAL_DEFAULT_TIME
     response = execute_request(url=url, headers=extra_headers, data=data, timeout=timeout)
     return response.read().decode("utf-8")
 
+
 def read_response_in_sequence(url, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, max_retries=0):
     split_url = parse.urlsplit(url=url)
     base_url = '%s://%s/%s?' % (split_url.scheme, split_url.netloc, split_url.path)
@@ -52,6 +54,23 @@ def read_response_in_sequence(url, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, max_r
     segment_data = b''
     for chunk in read_response_in_chunks(url=url, timeout=timeout, max_retries=max_retries):
         yield chunk
+        segment_data += chunk
+
+    stream_info = segment_data.split(b'\r\n')
+    segment_count_pattern = re.compile(b'Segment-Count: (\\d+)')
+    for line in stream_info:
+        match = segment_count_pattern.search(line)
+        if match:
+            segment_count = int(match.group(1).decode('utf-8'))
+
+    sequence_num = 1
+    while sequence_num <= segment_count:
+        querys['sq'] = seq_num
+        url = base_url + parse.urlencode(query=querys)
+
+        yield from read_response_in_chunks(url=url, timeout=timeout, max_retries=max_retries)
+        sequence_num += 1
+    return    
 
 def read_response_in_chunks(url, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, max_retries=0):
     file_size = default_range_size
@@ -63,16 +82,20 @@ def read_response_in_chunks(url, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, max_ret
 
         while True:
             if tries >= 1 + max_retries:
-                raise Exception
+                raise MaxRetriesError()
             try:
                 response = execute_request(url=url, method="GET", headers={"Range": range_header}, timeout=timeout)
             except URLError as e:
-                pass
+                if isinstance(e.reason, socket.timeout):
+                    pass
+                else:
+                    raise
             except http.client.IncompleteRead:
                 pass
             else:
                 break
             tries += 1  
+
         if file_size == default_range_size:
             try:
                 content_range = response.info()["Content-Range"]
@@ -87,9 +110,11 @@ def read_response_in_chunks(url, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, max_ret
             yield chunk
     return
 
+@lru_cache
 def get_file_size(url):
     return int(head(url)["content-length"])
 
+@lru_cache
 def get_file_size_from_seq_request(url):
     total_size = 0
     split_url = parse.urlsplit(url=url)
@@ -108,11 +133,11 @@ def get_file_size_from_seq_request(url):
     for line in stream_info:
         try:
             segment_count = int(regex_search(segment_regex, line, 1)) #import regex_search from helpers
-        except Exception:
+        except RegexMatchError:
             pass
     
     if segment_count == 0:
-        raise Exception
+        raise RegexMatchError('seq_filesize', segment_regex)
 
     sequence_num = 1
     while sequence_num < segment_count:
