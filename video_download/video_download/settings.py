@@ -9,6 +9,12 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import logging
+import os
+import sys
+
+import dj_database_url
+import dotenv
 
 from pathlib import Path
 
@@ -19,12 +25,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+dotenv_file = BASE_DIR / ".env"
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
+# SECRET_KEY = os.getenv(
+#     "DJANGO_SECRET_KEY",
+#     'x%#3&%giwv8f0+%r946en7z&d@9*rc$sl0qoql56xr%bh^w2mj',
+# )
+
+if os.environ.get('DJANGO_DEBUG', default=False) in ['True', 'true', '1', True]:
+    DEBUG = True
+else:
+    DEBUG = False
+
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -120,3 +136,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# -----> TELEGRAM
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+if TELEGRAM_TOKEN is None:
+    logging.error(
+        "Please provide TELEGRAM_TOKEN in .env file.\n"
+    )
+    sys.exit(1)
+
+TELEGRAM_LOGS_CHAT_ID = os.getenv("TELEGRAM_LOGS_CHAT_ID", default=None)
+
+
+#------> HEROKU APP
+PORT = int(os.environ.get('PORT', 80))
+# PORT = int(os.getenv("PORT"))
+HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
+if HEROKU_APP_NAME is None:
+    logging.error("Heroku name needs to be set")
+    sys.exit(1)
