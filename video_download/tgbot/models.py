@@ -92,3 +92,4 @@ class User(CreateUpdateTracker):
     @property
     def get_user_id(self):
         return self.user_id
+
