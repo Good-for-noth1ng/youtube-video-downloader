@@ -15,8 +15,16 @@ from video_download.settings import PORT, HEROKU_APP_NAME, TELEGRAM_TOKEN, DEBUG
 from tgbot.handlers.utils import error
 from tgbot.handlers.start_handler import handler as start_handler
 
+
 def setup_dispatcher(dp):
-    dp.add_error_handler(callback)
+    dp.add_handler(
+        ConversationHandler(
+            entry_points, 
+            states, 
+            fallbacks
+        )
+    )
+    dp.add_error_handler(error.sent_tracebak_into_chat)
     return dp
 
 def run_pooling():
