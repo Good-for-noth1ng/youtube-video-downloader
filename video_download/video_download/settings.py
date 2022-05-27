@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tgbot.apps.TgbotConfig'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'video_download.urls'
@@ -149,7 +156,6 @@ TELEGRAM_LOGS_CHAT_ID = os.getenv("TELEGRAM_LOGS_CHAT_ID", default=None)
 
 #------> HEROKU APP
 PORT = int(os.environ.get('PORT', 80))
-# PORT = int(os.getenv("PORT"))
 HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
 if HEROKU_APP_NAME is None:
     logging.error("Heroku name needs to be set")

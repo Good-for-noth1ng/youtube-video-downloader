@@ -1,4 +1,4 @@
-ASK_VIDEO_OR_PLAYLIST_STATE = "askvideoorplayliststate"
+#ASK_VIDEO_OR_PLAYLIST_STATE = "askvideoorplayliststate"
 ASK_FORMAT_STATE = "askformatstate"
 ASK_QUALITY_STATE = "askqualitystate"
 PUT_LINK_STATE = "putlinkstate"
