@@ -18,10 +18,16 @@ from tgbot.handlers.start_handler import handler as start_handler
 
 def setup_dispatcher(dp):
     dp.add_handler(
+        CommandHandler("start", start_handler.command_start)
+    )
+
+    dp.add_handler(
         ConversationHandler(
-            entry_points, 
-            states, 
-            fallbacks
+            entry_points=[
+                CommandHandler("download", callback)
+            ], 
+            states={}, 
+            fallbacks=[]
         )
     )
     dp.add_error_handler(error.sent_tracebak_into_chat)
@@ -65,8 +71,13 @@ except telegram.error.Unauthorized:
 
 def set_up_commands(bot_instance: Bot) -> None:
     langs_with_commands: Dict[str, Dict[str, str]] = {
+        'en': {
+            'start': 'Bot informations 🚀',
+            'download': 'Download video 🕹️'
+        },
         'ru': {
-            
+            'start': 'Узнать о боте 🚀',
+            'download': 'Скачать видео 🕹️'
         }
     }
     
