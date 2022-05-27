@@ -15,6 +15,10 @@ from video_download.settings import PORT, HEROKU_APP_NAME, TELEGRAM_TOKEN, DEBUG
 from tgbot.handlers.utils import error
 from tgbot.handlers.start_handler import handler as start_handler
 
+from tgbot.handlers.download_handler import handler as download_handler
+from tgbot.handlers.download_handler import conversation_state as download_cs
+from tgbot.handlers.download_handler import static_text as download_st
+
 
 def setup_dispatcher(dp):
     dp.add_handler(
@@ -24,9 +28,17 @@ def setup_dispatcher(dp):
     dp.add_handler(
         ConversationHandler(
             entry_points=[
-                CommandHandler("download", callback)
+                CommandHandler("download", download_handler.ask_put_url)
             ], 
-            states={}, 
+            states={
+                download_cs.PUT_URL_STATE: [
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/youtube\.com\/.*'), 
+                        download_handler.extract_video_format_and_quality
+                    ),
+                    MessageHandler(Filters.all, download_handler.not_youtube_domain)
+                ]
+            }, 
             fallbacks=[]
         )
     )
