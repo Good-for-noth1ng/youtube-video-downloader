@@ -19,6 +19,10 @@ from tgbot.handlers.download_handler import handler as download_handler
 from tgbot.handlers.download_handler import conversation_state as download_cs
 from tgbot.handlers.download_handler import static_text as download_st
 
+ALLOWED_DOMAINS = [
+    r'^https:\/\/youtube\.com\/.*',
+    r'^https:\/\/m.youtube\.com\/.*'
+]
 
 def setup_dispatcher(dp):
     dp.add_handler(
@@ -34,6 +38,10 @@ def setup_dispatcher(dp):
                 download_cs.PUT_URL_STATE: [
                     MessageHandler(
                         Filters.regex(r'^https:\/\/youtube\.com\/.*'), 
+                        download_handler.extract_video_format_and_quality
+                    ),
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/m.youtube\.com\/.*'), 
                         download_handler.extract_video_format_and_quality
                     ),
                     MessageHandler(Filters.all, download_handler.not_youtube_domain)
@@ -85,11 +93,13 @@ def set_up_commands(bot_instance: Bot) -> None:
     langs_with_commands: Dict[str, Dict[str, str]] = {
         'en': {
             'start': 'Bot informations 🚀',
-            'download': 'Download video 🕹️'
+            'download': 'Download video 🕹️',
+            'search': 'Search for video 🔍'
         },
         'ru': {
             'start': 'Узнать о боте 🚀',
-            'download': 'Скачать видео 🕹️'
+            'download': 'Скачать видео 🕹️',
+            'search': 'Найти видео 🔍'
         }
     }
     

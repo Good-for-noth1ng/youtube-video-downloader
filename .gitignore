@@ -148,3 +148,6 @@ video_download/.env
 video_download/.env
 video_download/.env
 video_download/.env
+
+#folder with doenloaded videos
+downloaded_videos/
