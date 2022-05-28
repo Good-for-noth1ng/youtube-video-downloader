@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from functools import partial
 from telegram import ParseMode, ReplyKeyboardRemove, Update
 from telegram.ext import CallbackContext, ConversationHandler
 
@@ -20,32 +21,17 @@ def ask_put_url(update: Update, context: CallbackContext) -> str:
     
 def extract_video_format_and_quality(update: Update, context: CallbackContext) -> str:
     url: str = update.message.text
-    context.user_data["updateid"] = update.update_id
-    yt = pytube.YouTube(url=url, on_complete_callback=callback_for_download(update))
-    # print(yt.check_availability())
-    # print(yt.vid_info["videoDetails"])
+    yt = pytube.YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
+    yt.check_availability()
     yt.streams.get_highest_resolution().download(output_path=VIDEO_DOWNLOAD_DIRECTORY)
-    # print(yt.vid_info)  
-    # progressive_streams = yt.streams.filter(progressive=True).fmt_streams
     return conversation_state.PUT_URL_STATE
     
-def callback_for_download(*args):
-    # update.message.reply_text(text=static_text.choose_quality_text)
-    def callback(*args):
-        if update:
-            update.message.reply_text(text="test callback")
-            return conversation_state.PUT_URL_STATE
-    return callback
+def callback_for_video_download(stream: pytube.YouTube, path_to_video: Path, update: Update):
+    update.message.reply_text(static_text.download_is_sucessful_text)
+    video = open(path_to_video, 'rb')
+    update.message.reply_video(video)
+    return conversation_state.PUT_URL_STATE 
 
-    
-    
-    # video_or_playlist = update.message.text
-    # if video_or_playlist == static_text.VIDEO_BUTTON:
-    #     context.user_data["video_or_playlist"] = "video"
-    # else:
-    #     context.user_data["video_or_playlist"] = "playlist"
-    # update.message.reply_text(text)
-    # return conversation_state.ASK_FORMAT_STATE
 
 def not_youtube_domain(update: Update, context: CallbackContext):
     update.message.reply_text(text=static_text.not_youtube_domain_text)

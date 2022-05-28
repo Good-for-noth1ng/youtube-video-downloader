@@ -25,32 +25,21 @@ def sent_tracebak_into_chat(update: Update, context: CallbackContext):
         f'An exception was raised while handling an update\n'
         f'<pre>{html.escape(tb_string)}</pre>'
     )
-
-    if context.error == VideoPrivate:
-        user_message = "Видео приватное"
-    elif context.error == VideoRegionBlocked:
-        user_message = "Из этого региона видео недоступно"
-    elif context.error == MembersOnly:
-        user_message = "Это видео только для участников сообщества"
-    elif context.error == VideoUnavailable:
-        user_message = "Видео недоступно"
-    else:
-        user_message = """
-            😔 Что-то пошло не так.
-            Вся информация по ошибке получена, скоро всё будет исправлено.
-            Вернуться: /start
-        """
+        
+    user_message = """
+    😔 Что-то пошло не так. Вся информация по ошибке получена, скоро всё будет исправлено. Вернуться: /start
+    """
     context.bot.send_message(
         chat_id=u.user_id,
         text=user_message,
     )
 
-    admin_message = f"⚠️⚠️⚠️ for {u.tg_str}:\n{message}"[:4090]
-    if TELEGRAM_LOGS_CHAT_ID:
-        context.bot.send_message(
-            chat_id=TELEGRAM_LOGS_CHAT_ID,
-            text=admin_message,
-            parse_mode=telegram.ParseMode.HTML,
-        )
-    else:
-        logging.error(admin_message)
+    # admin_message = f"⚠️⚠️⚠️ for {u.tg_str}:\n{message}"[:4090]
+    # if TELEGRAM_LOGS_CHAT_ID:
+    #     context.bot.send_message(
+    #         chat_id=TELEGRAM_LOGS_CHAT_ID,
+    #         text=admin_message,
+    #         parse_mode=telegram.ParseMode.HTML,
+    #     )
+    # else:
+    #     logging.error(admin_message)
