@@ -44,10 +44,16 @@ def setup_dispatcher(dp):
                         Filters.regex(r'^https:\/\/m.youtube\.com\/.*'), 
                         download_handler.extract_video_format_and_quality
                     ),
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/youtu.be\/.*'), 
+                        download_handler.extract_video_format_and_quality
+                    ),
                     MessageHandler(Filters.all, download_handler.not_youtube_domain)
                 ]
             }, 
-            fallbacks=[]
+            fallbacks=[
+                 MessageHandler(Filters.command, download_handler.stop)
+            ]
         )
     )
     dp.add_error_handler(error.sent_tracebak_into_chat)

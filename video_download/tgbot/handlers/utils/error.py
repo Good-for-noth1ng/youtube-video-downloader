@@ -6,6 +6,8 @@ import telegram
 from telegram import Update
 from telegram.ext import CallbackContext
 
+from pytube.exceptions import VideoPrivate, VideoRegionBlocked, VideoUnavailable, MembersOnly
+
 from tgbot.models import User
 from video_download.settings import TELEGRAM_LOGS_CHAT_ID
 
@@ -24,11 +26,20 @@ def sent_tracebak_into_chat(update: Update, context: CallbackContext):
         f'<pre>{html.escape(tb_string)}</pre>'
     )
 
-    user_message = """
-        😔 Что-то пошло не так.
-        Вся информация по ошибке получена, скоро всё будет исправлено.
-        Вернуться: /start
-    """
+    if context.error == VideoPrivate:
+        user_message = "Видео приватное"
+    elif context.error == VideoRegionBlocked:
+        user_message = "Из этого региона видео недоступно"
+    elif context.error == MembersOnly:
+        user_message = "Это видео только для участников сообщества"
+    elif context.error == VideoUnavailable:
+        user_message = "Видео недоступно"
+    else:
+        user_message = """
+            😔 Что-то пошло не так.
+            Вся информация по ошибке получена, скоро всё будет исправлено.
+            Вернуться: /start
+        """
     context.bot.send_message(
         chat_id=u.user_id,
         text=user_message,
