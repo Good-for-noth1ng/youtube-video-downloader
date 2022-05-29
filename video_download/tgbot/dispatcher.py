@@ -19,9 +19,8 @@ from tgbot.handlers.download_handler import handler as download_handler
 from tgbot.handlers.download_handler import conversation_state as download_cs
 from tgbot.handlers.download_handler import static_text as download_st
 
-ALLOWED_DOMAINS = [
-    r'^https:\/\/youtube\.com\/.*',
-    r'^https:\/\/m.youtube\.com\/.*'
+VIDEO_RESOLUTION_FORMATS = [
+    "144p", "360p", "240p", "480p", "720p", "1080p"
 ]
 
 def setup_dispatcher(dp):
@@ -49,6 +48,10 @@ def setup_dispatcher(dp):
                         download_handler.extract_video_format_and_quality
                     ),
                     MessageHandler(Filters.all, download_handler.not_youtube_domain)
+                ],
+                download_cs.ASK_QUALITY_STATE: [
+                    MessageHandler(Filters.text(VIDEO_RESOLUTION_FORMATS), download_handler.download),
+                    MessageHandler(Filters.all, download_handler)
                 ]
             }, 
             fallbacks=[
