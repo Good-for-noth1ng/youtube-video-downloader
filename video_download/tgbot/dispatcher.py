@@ -19,6 +19,9 @@ from tgbot.handlers.download_handler import handler as download_handler
 from tgbot.handlers.download_handler import conversation_state as download_cs
 from tgbot.handlers.download_handler import static_text as download_st
 
+from tgbot.handlers.search_handler import conversation_state as search_cs
+from tgbot.handlers.search_handler import handler as search_handler
+
 VIDEO_RESOLUTION_FORMATS = [
     "144p", "360p", "240p", "480p", "720p", "1080p"
 ]
@@ -60,6 +63,25 @@ def setup_dispatcher(dp):
             ]
         )
     )
+
+    dp.add_handler(ConversationHandler(
+            entry_points=[
+                CommandHandler("search", search_handler.ask_query)
+            ], 
+            states={
+                search_cs.GET_SEARCH_QUERY_STATE: [
+                    MessageHandler(Filters.text, search_handler.search_by_query)
+                ],
+                search_cs.DOWNLOAD_BY_SEARCH_STATE: [
+                    MessageHandler(Filters.update, search_handler.download)
+                ]
+            }, 
+            fallbacks=[
+                MessageHandler(Filters.command, search_handler.stop)
+            ]
+        )
+    )
+
     dp.add_error_handler(error.sent_tracebak_into_chat)
     return dp
 
