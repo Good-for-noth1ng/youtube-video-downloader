@@ -13,7 +13,6 @@ from video_download.settings import TELEGRAM_LOGS_CHAT_ID
 
 def sent_tracebak_into_chat(update: Update, context: CallbackContext):
     u = User.get_user(update, context)
-
     logging.error("Exception while handling an update:", exc_info=context.error)
 
     tb_list = traceback.format_exception(None, context.error, context.error.__traceback__)
@@ -34,12 +33,12 @@ def sent_tracebak_into_chat(update: Update, context: CallbackContext):
         text=user_message,
     )
 
-    # admin_message = f"⚠️⚠️⚠️ for {u.tg_str}:\n{message}"[:4090]
-    # if TELEGRAM_LOGS_CHAT_ID:
-    #     context.bot.send_message(
-    #         chat_id=TELEGRAM_LOGS_CHAT_ID,
-    #         text=admin_message,
-    #         parse_mode=telegram.ParseMode.HTML,
-    #     )
-    # else:
-    #     logging.error(admin_message)
+    admin_message = f"⚠️⚠️⚠️ for {u.tg_str}:\n{message}"[:4090]
+    if TELEGRAM_LOGS_CHAT_ID:
+        context.bot.send_message(
+            chat_id=TELEGRAM_LOGS_CHAT_ID,
+            text=admin_message,
+            parse_mode=telegram.ParseMode.HTML,
+        )
+    else:
+        logging.error(admin_message)

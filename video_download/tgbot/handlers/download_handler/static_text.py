@@ -11,3 +11,4 @@ choose_quality_text = "Выбери качество"
 
 VIDEO_BUTTON = "Видео"
 PLAYLIST_BUTTON = "Плей-лист"
+GET_AUDIO_BUTTON = "Аудио"

@@ -19,5 +19,6 @@ def make_keyboard_ask_video_or_playlist()->ReplyKeyboardMarkup:
 def make_keyboard_ask_format()->ReplyKeyboardMarkup:
     buttons = []
 
-def make_keyboard_ask_quality()-> ReplyKeyboardMarkup:
-    pass
+def make_keyboard_ask_quality(available_video_resolution)-> ReplyKeyboardMarkup:
+    menu = build_menu(buttons=available_video_resolution, n_cols=2, bottom_buttons=static_text.GET_AUDIO_BUTTON)
+    return ReplyKeyboardMarkup(keyboard=menu, resize_keyboard=True, one_time_keyboard=True)
