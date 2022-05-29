@@ -5,9 +5,8 @@ not_a_resolution_text = "Это не разрешение или формат!"
 download_is_sucessful_text = "Загрузка завершена"
 video_is_unavailable = "Видео недоступно"
 
-choose_video_format_text = "Выбери формат видео"
 choose_quality_text = "Выбери аудио, либо выбери качество видео"
-
+download_started = "Загрузка началась"
 
 
 VIDEO_BUTTON = "Видео"

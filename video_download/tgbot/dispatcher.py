@@ -51,7 +51,8 @@ def setup_dispatcher(dp):
                 ],
                 download_cs.ASK_QUALITY_STATE: [
                     MessageHandler(Filters.text(VIDEO_RESOLUTION_FORMATS), download_handler.download),
-                    MessageHandler(Filters.all, download_handler)
+                    MessageHandler(Filters.regex(r'^Аудио$'), download_handler.download),
+                    MessageHandler(Filters.all, download_handler.resolution_is_required)
                 ]
             }, 
             fallbacks=[
