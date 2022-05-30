@@ -73,7 +73,7 @@ def setup_dispatcher(dp):
                     MessageHandler(Filters.text, search_handler.search_by_query)
                 ],
                 search_cs.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE: [
-                    MessageHandler(Filters.update, search_handler.ask_format_and_quality)
+                    CallbackQueryHandler(search_handler.ask_format_and_quality)
                 ],
                 search_cs.DOWNLOAD_BY_SEARCH_STATE: [
                     MessageHandler(Filters.text(VIDEO_RESOLUTION_FORMATS), download_handler.download),

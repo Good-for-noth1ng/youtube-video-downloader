@@ -23,7 +23,7 @@ def ask_put_url(update: Update, context: CallbackContext) -> str:
 def ask_video_format_and_quality(url: str, update: Update, context: CallbackContext):
     context.user_data["url"] = url
     available_video_resolution = check_available_video_resolution(url, context)
-    update.message.reply_text(
+    update.callback_query.message.edit_text(
         text=static_text.choose_quality_text, 
         reply_markup=keyboards.make_keyboard_ask_quality(available_video_resolution)
     )
@@ -54,16 +54,14 @@ def download(update: Update, context: CallbackContext):
         if resolution == static_text.GET_AUDIO_BUTTON:
             yt = pytube.YouTube(url=url, on_complete_callback=partial(callback_for_audio_download, update=update, context=context))
             yt.streams.get_audio_only().download(output_path=DOWNLOAD_DIRECTORY)
-            context.user_data.clear()
         else:
             yt = pytube.YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
             yt.streams.get_by_resolution(resolution).download(output_path=DOWNLOAD_DIRECTORY)
-            context.user_data.clear()
     except Exception as e:
         update.message.reply_text(static_text.video_is_unavailable)
+    finally:
         context.user_data.clear()
-        return ConversationHandler.END
-        
+        return ConversationHandler.END 
 
 def callback_for_audio_download(stream: pytube.YouTube, path_to_audio: Path, update: Update, context: CallbackContext):
     update.message.reply_text(text=static_text.download_is_sucessful_text)

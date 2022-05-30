@@ -19,33 +19,26 @@ def search_by_query(update: Update, context: CallbackContext):
     query = update.message.text
     search = Search(query)
     results = search.results
-    # for result in results:
-    #     try:
-    #         video_id = result.vid_info['videoDetails']['videoId']
-    #     except KeyError:
-    #         continue
-    #     video_title = result.title
-    #     video_author = result.author
-    #     video_length = get_video_length(result.length)
-    #     message_text = f"🧑 {video_author}: ▶️ {video_title}, 🕐 {video_length}"
-    #     update.message.reply_text(
-    #         text=message_text, 
-    #         reply_markup=keyboards.make_keyboard_to_ask_video(video_id=video_id)
-    #     )
-    video_id = results[0].vid_info['videoDetails']['videoId']
-    update.message.reply_text(
-            text="test",
+    for result in results:
+        try:
+            video_id = result.vid_info['videoDetails']['videoId']
+        except KeyError:
+            continue
+        video_title = result.title
+        video_author = result.author
+        video_length = get_video_length(result.length)
+        message_text = f"🧑 {video_author}: ▶️ {video_title}, 🕐 {video_length}"
+        update.message.reply_text(
+            text=message_text, 
             reply_markup=keyboards.make_keyboard_to_ask_video(video_id=video_id)
         )
     return conversation_state.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE
 
 def ask_format_and_quality(update: Update, context: CallbackContext):
-    print("smthg")
-    # video_id = update.callback_query
-    # print(video_id)
-    # url = f"https://youtube.com/watch?v={video_id}"
-    # download_handler.ask_video_format_and_quality(url=url, update=update, context=context)
-    # return conversation_state.DOWNLOAD_BY_SEARCH_STATE
+    video_id = update.callback_query['data']
+    url = f"https://youtube.com/watch?v={video_id}"
+    download_handler.ask_video_format_and_quality(url=url, update=update, context=context)
+    return conversation_state.DOWNLOAD_BY_SEARCH_STATE
 
 def stop(update: Update, context: CallbackContext):
     return ConversationHandler.END

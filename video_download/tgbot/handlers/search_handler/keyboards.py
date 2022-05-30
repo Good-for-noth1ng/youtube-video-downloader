@@ -13,6 +13,5 @@ def build_menu(buttons, n_cols, header_buttons=None, bottom_buttons=None):
 
 def make_keyboard_to_ask_video(video_id) -> InlineKeyboardMarkup:
     button_text = static_text.download_video_text
-    # menu = [[InlineKeyboardButton(text=button_text, callback_data=video_id)]]
-    menu = [[InlineKeyboardButton(text=button_text, callback_data="hey")]]
+    menu = [[InlineKeyboardButton(text=button_text, callback_data=video_id)]]
     return InlineKeyboardMarkup(inline_keyboard=menu)
