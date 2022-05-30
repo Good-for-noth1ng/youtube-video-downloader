@@ -77,14 +77,12 @@ def callback_for_audio_download(stream: YouTube, path_to_audio: Path, update: Up
     update.callback_query.edit_message_text(text=download_st.download_is_sucessful_text)
     with open(path_to_audio, 'rb') as audio:
         update.callback_query.message.reply_audio(audio, performer=context.user_data["author"], title=context.user_data["title"])
-        # update.message.reply_audio(audio, performer=context.user_data["author"], title=context.user_data["title"])
     os.remove(path_to_audio) 
 
 def callback_for_video_download(stream: YouTube, path_to_video: Path, update: Update):
     update.callback_query.edit_message_text(text=download_st.download_is_sucessful_text)
     with open(path_to_video, 'rb') as video:
         update.callback_query.message.reply_video(video)
-        # update.message.reply_video(video)   
     os.remove(path_to_video)
 
 def stop(update: Update, context: CallbackContext):
