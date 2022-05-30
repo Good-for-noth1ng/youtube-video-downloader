@@ -1,4 +1,4 @@
-from telegram import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import tgbot.handlers.search_handler.static_text as static_text
 
 
@@ -11,7 +11,8 @@ def build_menu(buttons, n_cols, header_buttons=None, bottom_buttons=None):
     return menu
 
 
-def make_keyboard_to_ask_video(youtube_object) -> InlineKeyboardMarkup:
+def make_keyboard_to_ask_video(video_id) -> InlineKeyboardMarkup:
     button_text = static_text.download_video_text
-    menu = [[KeyboardButton(text=button_text, callback_data=youtube_object)]]
+    # menu = [[InlineKeyboardButton(text=button_text, callback_data=video_id)]]
+    menu = [[InlineKeyboardButton(text=button_text, callback_data="hey")]]
     return InlineKeyboardMarkup(inline_keyboard=menu)

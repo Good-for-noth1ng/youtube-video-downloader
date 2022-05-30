@@ -59,7 +59,7 @@ def setup_dispatcher(dp):
                 ]
             }, 
             fallbacks=[
-                 MessageHandler(Filters.command, download_handler.stop)
+                MessageHandler(Filters.command, download_handler.stop)
             ]
         )
     )
@@ -72,8 +72,13 @@ def setup_dispatcher(dp):
                 search_cs.GET_SEARCH_QUERY_STATE: [
                     MessageHandler(Filters.text, search_handler.search_by_query)
                 ],
+                search_cs.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE: [
+                    MessageHandler(Filters.update, search_handler.ask_format_and_quality)
+                ],
                 search_cs.DOWNLOAD_BY_SEARCH_STATE: [
-                    MessageHandler(Filters.update, search_handler.download)
+                    MessageHandler(Filters.text(VIDEO_RESOLUTION_FORMATS), download_handler.download),
+                    MessageHandler(Filters.regex(r'^Аудио$'), download_handler.download),
+                    MessageHandler(Filters.all, download_handler.resolution_is_required)
                 ]
             }, 
             fallbacks=[
