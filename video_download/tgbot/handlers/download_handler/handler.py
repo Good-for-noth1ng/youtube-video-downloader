@@ -11,8 +11,8 @@ from telegram.ext import CallbackContext, ConversationHandler
 import tgbot.handlers.download_handler.conversation_state as conversation_state
 import tgbot.handlers.download_handler.static_text as static_text
 import tgbot.handlers.download_handler.keyboards as keyboards
+from tgbot.handlers.utils.const import DOWNLOAD_DIRECTORY
 
-DOWNLOAD_DIRECTORY = Path(__file__).resolve().parent.parent.parent / "downloaded_videos"
 
 def ask_put_url(update: Update, context: CallbackContext) -> str:
     update.message.reply_text(
@@ -23,7 +23,7 @@ def ask_put_url(update: Update, context: CallbackContext) -> str:
 def ask_video_format_and_quality(url: str, update: Update, context: CallbackContext):
     context.user_data["url"] = url
     available_video_resolution = check_available_video_resolution(url, context)
-    update.callback_query.message.edit_text(
+    update.message.reply_text(
         text=static_text.choose_quality_text, 
         reply_markup=keyboards.make_keyboard_ask_quality(available_video_resolution)
     )
@@ -88,4 +88,4 @@ def resolution_is_required(update: Update, context: CallbackContext):
 
 def stop(update: Update, context: CallbackContext):
     context.user_data.clear()
-    ConversationHandler.END
+    return ConversationHandler.END
