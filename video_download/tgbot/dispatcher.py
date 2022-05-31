@@ -75,12 +75,6 @@ def setup_dispatcher(dp):
                 search_cs.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE: [
                     CallbackQueryHandler(search_handler.ask_format_and_quality)
                 ],
-                search_cs.DOWNLOAD_BY_SEARCH_STATE: [
-                    CallbackQueryHandler(search_handler.download),
-                    # MessageHandler(Filters.text(VIDEO_RESOLUTION_FORMATS), download_handler.download),
-                    # MessageHandler(Filters.regex(r'^Аудио$'), download_handler.download),
-                    # MessageHandler(Filters.all, download_handler.resolution_is_required)
-                ]
             }, 
             fallbacks=[
                 MessageHandler(Filters.command, search_handler.stop)
