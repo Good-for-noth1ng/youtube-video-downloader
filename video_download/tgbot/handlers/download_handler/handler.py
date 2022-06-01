@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 from functools import partial
-from typing import List
+from typing import List, Dict, Tuple
 
 import pytube
+from pytube import YouTube
 from telegram import ParseMode, ReplyKeyboardRemove, Update
 from telegram.ext import CallbackContext, ConversationHandler
 
@@ -34,16 +35,19 @@ def extract_video_format_and_quality(update: Update, context: CallbackContext) -
     return conversation_state.ASK_QUALITY_STATE
 
     
-def check_available_video_resolution(url: str, context: CallbackContext) -> List[str]:
+def check_available_video_resolution(url: str) -> List[str]:
     available_video_resolution = []
     yt = pytube.YouTube(url=url)
-    context.user_data["title"] = yt.title
-    context.user_data["author"] = yt.author
     streams = yt.streams.filter(progressive=True).all()
     for stream in streams:
         if yt.streams.get_by_resolution(stream.resolution) is not None:
             available_video_resolution.append(stream.resolution)
     return available_video_resolution
+
+
+def get_author_and_title(url: str) -> Tuple[str, str]:
+    yt = YouTube(url)
+    return yt.author, yt.title
 
 
 def download(update: Update, context: CallbackContext):
