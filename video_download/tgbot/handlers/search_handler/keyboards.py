@@ -22,10 +22,7 @@ def make_inline_keyboard_ask_quality(available_video_resolution: list, button_da
     buttons = []
     for resolution in available_video_resolution:
         button_data["resolution"] = resolution
-        print(button_data)
         button_data = to_str(button_data)
-        print(button_data)
-        print(len(button_data.encode('utf-8')))
         buttons.append([InlineKeyboardButton(text=resolution, callback_data=button_data)])
         button_data = to_dict(button_data)
     button_data["resolution"] = download_st.GET_AUDIO_BUTTON

@@ -73,7 +73,7 @@ def setup_dispatcher(dp):
                     MessageHandler(Filters.text, search_handler.search_by_query)
                 ],
                 search_cs.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE: [
-                    CallbackQueryHandler(search_handler.ask_format_and_quality)
+                    CallbackQueryHandler(search_handler.ask_format_and_quality, run_async=True)
                 ],
             }, 
             fallbacks=[
