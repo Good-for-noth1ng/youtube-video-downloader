@@ -7,8 +7,8 @@ from typing import Dict
 from telegram import ParseMode, ReplyKeyboardRemove, Update
 from telegram.ext import CallbackContext, ConversationHandler
 
-from  pytube import YouTube, Search
-
+from youtube_crawler.pytube.__main__ import YouTube
+from youtube_crawler.pytube.contrib.search import Search
 from tgbot.handlers.search_handler import conversation_state 
 from tgbot.handlers.search_handler import static_text as search_st
 from tgbot.handlers.search_handler import keyboards

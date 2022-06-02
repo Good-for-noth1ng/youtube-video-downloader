@@ -6,7 +6,6 @@ import telegram
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from pytube.exceptions import VideoPrivate, VideoRegionBlocked, VideoUnavailable, MembersOnly
 
 from tgbot.models import User
 from video_download.settings import TELEGRAM_LOGS_CHAT_ID
