@@ -65,7 +65,7 @@ def ask_format_and_quality(update: Update, context: CallbackContext):
         update.callback_query.edit_message_text(text=download_st.download_started)
         video_id = query_data["video_id"]
         url = f"https://youtube.com/watch?v={video_id}"
-        title, author = download_handler.get_author_and_title(url)
+        author, title = download_handler.get_author_and_title(url)
         yt = YouTube(
             url=url, 
             on_complete_callback=partial(

@@ -21,17 +21,15 @@ def ask_put_url(update: Update, context: CallbackContext) -> str:
     )
     return conversation_state.PUT_URL_STATE
 
-def ask_video_format_and_quality(url: str, update: Update, context: CallbackContext):
+
+def extract_video_format_and_quality(update: Update, context: CallbackContext) -> str:
+    url: str = update.message.text
     context.user_data["url"] = url
-    available_video_resolution = check_available_video_resolution(url, context)
+    available_video_resolution = check_available_video_resolution(url)
     update.message.reply_text(
         text=static_text.choose_quality_text, 
         reply_markup=keyboards.make_keyboard_ask_quality(available_video_resolution)
     )
-
-def extract_video_format_and_quality(update: Update, context: CallbackContext) -> str:
-    url: str = update.message.text
-    ask_video_format_and_quality(url, update, context)
     return conversation_state.ASK_QUALITY_STATE
 
     
@@ -56,7 +54,7 @@ def download(update: Update, context: CallbackContext):
     update.message.reply_text(text=static_text.download_started, reply_markup=ReplyKeyboardRemove())
     try:
         if resolution == static_text.GET_AUDIO_BUTTON:
-            yt = pytube.YouTube(url=url, on_complete_callback=partial(callback_for_audio_download, update=update, context=context))
+            yt = pytube.YouTube(url=url, on_complete_callback=partial(callback_for_audio_download, update=update, url=url))
             yt.streams.get_audio_only().download(output_path=DOWNLOAD_DIRECTORY)
         else:
             yt = pytube.YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
@@ -67,10 +65,11 @@ def download(update: Update, context: CallbackContext):
         context.user_data.clear()
         return ConversationHandler.END 
 
-def callback_for_audio_download(stream: pytube.YouTube, path_to_audio: Path, update: Update, context: CallbackContext):
+def callback_for_audio_download(stream: pytube.YouTube, path_to_audio: Path, update: Update, url: str):
     update.message.reply_text(text=static_text.download_is_sucessful_text)
+    author, title = get_author_and_title(url)
     with open(path_to_audio, 'rb') as audio:
-        update.message.reply_audio(audio, performer=context.user_data["author"], title=context.user_data["title"])
+        update.message.reply_audio(audio, performer=author, title=title)
     os.remove(path_to_audio)
     return ConversationHandler.END 
 
