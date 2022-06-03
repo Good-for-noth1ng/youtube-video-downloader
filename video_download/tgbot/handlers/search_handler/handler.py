@@ -55,7 +55,6 @@ def is_resolution(query_data: str) -> bool:
     else:
         return False
 
-
 def ask_format_and_quality(update: Update, context: CallbackContext):
     query = update.callback_query
     query_data = query.data
