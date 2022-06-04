@@ -52,6 +52,12 @@ def setup_dispatcher(dp):
                     ),
                     MessageHandler(Filters.all, download_handler.not_youtube_domain)
                 ],
+                download_cs.ASK_QUALITY_FOR_PLAYLIST_STATE: [
+                    MessageHandler(Filters.text(download_st.GET_AUDIO_BUTTON), download_handler.download_playlist_videos),
+                    MessageHandler(Filters.text(download_st.GET_HIGHEST_RESOLUTION_BUTTON), download_handler.download_playlist_videos),
+                    MessageHandler(Filters.text(download_st.GET_LOWEST_RESOLUTION_BUTTON), download_handler.download_playlist_videos),
+                    MessageHandler(Filters.all, download_handler.resolution_is_required)
+                ],
                 download_cs.ASK_QUALITY_STATE: [
                     MessageHandler(Filters.text(VIDEO_RESOLUTION_FORMATS), download_handler.download),
                     MessageHandler(Filters.regex(r'^Аудио$'), download_handler.download),
@@ -73,7 +79,7 @@ def setup_dispatcher(dp):
                     MessageHandler(Filters.text, search_handler.search_by_query)
                 ],
                 search_cs.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE: [
-                    CallbackQueryHandler(search_handler.ask_format_and_quality, run_async=True)
+                    CallbackQueryHandler(search_handler.ask_format_and_quality)
                 ],
             }, 
             fallbacks=[

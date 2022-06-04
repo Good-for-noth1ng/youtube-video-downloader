@@ -76,8 +76,8 @@ class User(CreateUpdateTracker):
         """ Search user in DB, return User or None if not found """
         username = str(username_or_user_id).replace("@", "").strip().lower()
         if username.isdigit():  # user_id
-            return cls.objects.filter(user_id=int(username)).first()
-        return cls.objects.filter(username__iexact=username).first()
+            return cls.objects.filter(user_id=int(user_name)).first()
+        return cls.objects.filter(username__iexact=user_name).first()
 
     @property
     def invited_users(self) -> QuerySet[User]:

@@ -1,14 +1,13 @@
 send_url_text = "Пришли ссылку на видео или на плейлист"
-video_or_playlist_text = "Нужно скачать видео или плей-лист?"
 not_youtube_domain_text = "Это не youtube!"
 not_a_resolution_text = "Это не разрешение или формат!"
 download_is_sucessful_text = "Загрузка завершена... Файл отправляется..."
 video_is_unavailable = "Видео недоступно"
-
 choose_quality_text = "Выбери аудио, либо выбери качество видео"
 download_started = "Загрузка началась..."
+choose_res_for_playlist_text = "Выберите разрешение для плей-листа"
+all_playlist_is_downloaded_text = "Весь плейлист скачан"
 
-
-VIDEO_BUTTON = "Видео"
-PLAYLIST_BUTTON = "Плей-лист"
+GET_HIGHEST_RESOLUTION_BUTTON = "Скачать в самом высоком разрешении (из доступных)"
+GET_LOWEST_RESOLUTION_BUTTON = "Скачать в самом низком разрешении (из доступных)"
 GET_AUDIO_BUTTON = "Аудио"
