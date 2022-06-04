@@ -61,36 +61,49 @@ def ask_format_and_quality(update: Update, context: CallbackContext):
     query.answer()
     query_data = to_dict(query_data)
     if query_data["resolution"] == download_st.GET_AUDIO_BUTTON:
-        update.callback_query.edit_message_text(text=download_st.download_started)
-        video_id = query_data["video_id"]
-        url = f"https://youtube.com/watch?v={video_id}"
-        author, title = download_handler.get_author_and_title(url)
-        yt = YouTube(
-            url=url, 
-            on_complete_callback=partial(
-                callback_for_audio_download, 
-                update=update, 
-                query_data=query_data,
-                author=author,
-                title=title
-            )
-        )
-        yt.streams.get_audio_only().download(output_path=DOWNLOAD_DIRECTORY)
+        start_audio_download(update, query_data)
     elif is_resolution(query_data["resolution"]):
-        update.callback_query.edit_message_text(text=download_st.download_started)
-        video_id = query_data["video_id"]
-        url = f"https://youtube.com/watch?v={video_id}"
-        yt = YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
-        yt.streams.get_by_resolution(query_data["resolution"]).download(output_path=DOWNLOAD_DIRECTORY)
+        start_video_download(update, query_data)
     else:
-        video_id = query_data["video_id"]
-        url = f"https://youtube.com/watch?v={video_id}"
-        available_resolution = download_handler.check_available_video_resolution(url=url)
-        update.callback_query.edit_message_text(
-            text=download_st.choose_quality_text, 
-            reply_markup=keyboards.make_inline_keyboard_ask_quality(available_resolution, query_data)
-        )
+        get_available_resolution(update, query_data)
     return conversation_state.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE
+
+
+def start_audio_download(update: Update, query_data: Dict):
+    update.callback_query.edit_message_text(text=download_st.download_started)
+    video_id = query_data["video_id"]
+    url = f"https://youtube.com/watch?v={video_id}"
+    author, title = download_handler.get_author_and_title(url)
+    yt = YouTube(
+        url=url, 
+        on_complete_callback=partial(
+            callback_for_audio_download, 
+            update=update, 
+            query_data=query_data,
+            author=author,
+            title=title
+        )
+    )
+    yt.streams.get_audio_only().download(output_path=DOWNLOAD_DIRECTORY)
+    
+
+
+def start_video_download(update: Update, query_data: Dict):
+    update.callback_query.edit_message_text(text=download_st.download_started)
+    video_id = query_data["video_id"]
+    url = f"https://youtube.com/watch?v={video_id}"
+    yt = YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
+    yt.streams.get_by_resolution(query_data["resolution"]).download(output_path=DOWNLOAD_DIRECTORY)
+    
+
+def get_available_resolution(update: Update, query_data: Dict):
+    video_id = query_data["video_id"]
+    url = f"https://youtube.com/watch?v={video_id}"
+    available_resolution = download_handler.check_available_video_resolution(url=url)
+    update.callback_query.edit_message_text(
+        text=download_st.choose_quality_text, 
+        reply_markup=keyboards.make_inline_keyboard_ask_quality(available_resolution, query_data)
+    )
 
 
 def callback_for_audio_download(stream: YouTube, path_to_audio: Path, update: Update, query_data: Dict, author, title):
