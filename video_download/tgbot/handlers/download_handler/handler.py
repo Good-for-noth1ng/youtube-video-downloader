@@ -62,21 +62,29 @@ def download_playlist_videos(update: Update, context: CallbackContext):
     for url in playlist.video_urls:
         try:
             if resolution == static_text.GET_AUDIO_BUTTON:
-                yt = YouTube(url=url, on_complete_callback=partial(callback_for_audio_download, update=update, url=url))
-                yt.streams.get_audio_only().download(output_path=DOWNLOAD_DIRECTORY)
+                context.dispatcher.run_async(start_download_playlist_audio, update, url)                
             elif resolution == static_text.GET_LOWEST_RESOLUTION_BUTTON:
-                yt = YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
-                yt.streams.get_lowest_resolution.download(output_path=DOWNLOAD_DIRECTORY)
+                context.dispatcher.run_async(start_download_playlist_video_lowest, update, url)    
             elif resolution == static_text.GET_HIGHEST_RESOLUTION_BUTTON:
-                yt = YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
-                yt.streams.get_highest_resolution.download(output_path=DOWNLOAD_DIRECTORY)            
+                context.dispatcher.run_async(start_download_playlist_video_highest, update, url)                            
         except Exception as e:
             update.message.reply_text(static_text.video_is_unavailable)
             continue
     update.message.reply_text(text=static_text.all_playlist_is_downloaded_text, reply_markup=ReplyKeyboardRemove())
     context.user_data.clear()
     return ConversationHandler.END
-    
+
+def start_download_playlist_audio(update: Update, url: str):
+    yt = YouTube(url=url, on_complete_callback=partial(callback_for_audio_download, update=update, url=url))
+    yt.streams.get_audio_only().download(output_path=DOWNLOAD_DIRECTORY)
+
+def start_download_playlist_video_lowest(update: Update, url: str):
+    yt = YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
+    yt.streams.get_lowest_resolution().download(output_path=DOWNLOAD_DIRECTORY)
+
+def start_download_playlist_video_highest(update: Update, url: str):
+    yt = YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
+    yt.streams.get_highest_resolution().download(output_path=DOWNLOAD_DIRECTORY)
 
 def get_author_and_title(url: str) -> Tuple[str, str]:
     yt = YouTube(url)

@@ -50,8 +50,11 @@ class User(CreateUpdateTracker):
 
     objects = GetOrNoneManager()
     admins = AdminUserManager()
+
+
     def __str__(self):
         return f"@{self.user_name}" if self.user_name is not None else f"{self.user_id}"
+
 
     @classmethod
     def get_user_and_created(cls, update: Update, context: CallbackContext) -> Tuple[User, bool]:
@@ -65,6 +68,7 @@ class User(CreateUpdateTracker):
                     u.deep_link = payload
                     u.save()
         return u, created
+
     @classmethod
     def get_user(cls, update: Update, context: CallbackContext) -> User:
         """Gets user from db"""

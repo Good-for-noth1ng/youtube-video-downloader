@@ -56,14 +56,17 @@ def setup_dispatcher(dp):
                     MessageHandler(
                         Filters.text(download_st.GET_AUDIO_BUTTON), 
                         download_handler.download_playlist_videos,
+                        run_async=True
                     ),
                     MessageHandler(
                         Filters.text(download_st.GET_HIGHEST_RESOLUTION_BUTTON), 
                         download_handler.download_playlist_videos,
+                        run_async=True
                     ),
                     MessageHandler(Filters.text(
                         download_st.GET_LOWEST_RESOLUTION_BUTTON), 
                         download_handler.download_playlist_videos,
+                        run_async=True
                     ),
                     MessageHandler(Filters.all, download_handler.resolution_is_required)
                 ],
