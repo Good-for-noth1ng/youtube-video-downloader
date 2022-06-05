@@ -7,6 +7,7 @@ choose_quality_text = "Выбери аудио, либо выбери качес
 download_started = "Загрузка началась..."
 choose_res_for_playlist_text = "Выберите разрешение для плей-листа"
 all_playlist_is_downloaded_text = "Весь плейлист скачан"
+playlist_download_started_text = "Загрузка плейлиста началась"
 
 GET_HIGHEST_RESOLUTION_BUTTON = "Скачать в самом высоком разрешении (из доступных)"
 GET_LOWEST_RESOLUTION_BUTTON = "Скачать в самом низком разрешении (из доступных)"

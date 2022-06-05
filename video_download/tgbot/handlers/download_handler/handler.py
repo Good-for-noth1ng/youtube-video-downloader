@@ -70,7 +70,7 @@ def download_playlist_videos(update: Update, context: CallbackContext):
         except Exception as e:
             update.message.reply_text(static_text.video_is_unavailable)
             continue
-    update.message.reply_text(text=static_text.all_playlist_is_downloaded_text, reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text(text=static_text.playlist_download_started_text, reply_markup=ReplyKeyboardRemove())
     context.user_data.clear()
     return ConversationHandler.END
 
