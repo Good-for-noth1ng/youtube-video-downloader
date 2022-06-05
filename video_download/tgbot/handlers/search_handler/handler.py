@@ -61,11 +61,11 @@ def ask_format_and_quality(update: Update, context: CallbackContext):
     query.answer()
     query_data = to_dict(query_data)
     if query_data["resolution"] == download_st.GET_AUDIO_BUTTON:
-        start_audio_download(update, query_data)
+        context.dispatcher.run_async(partial(start_audio_download, update, query_data))
     elif is_resolution(query_data["resolution"]):
-        start_video_download(update, query_data)
+        context.dispatcher.run_async(partial(start_video_download, update, query_data))
     else:
-        get_available_resolution(update, query_data)
+        context.dispatcher.run_async(partial(get_available_resolution, update, query_data), update=update)
     return conversation_state.ASK_QUALITY_AND_FORMAT_BY_SEARCH_STATE
 
 
