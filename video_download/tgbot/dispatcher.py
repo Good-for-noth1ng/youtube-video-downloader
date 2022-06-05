@@ -84,7 +84,7 @@ def setup_dispatcher(dp):
             }, 
             fallbacks=[
                 MessageHandler(Filters.command, search_handler.stop)
-            ]
+            ], 
         )
     )
 

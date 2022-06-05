@@ -26,7 +26,7 @@ def extract_user_data_from_update(update: Update):
         is_blocked_bot=False,
         **{
             k: user[k]
-            for k in ["username", "first_name", "last_name"]
+            for k in ["user_name", "first_name", "last_name"]
             if k in user and user[k] is not None
         },
     )
