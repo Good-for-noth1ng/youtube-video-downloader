@@ -69,14 +69,14 @@ def download_playlist_videos(update: Update, context: CallbackContext):
                 yt.streams.get_lowest_resolution.download(output_path=DOWNLOAD_DIRECTORY)
             elif resolution == static_text.GET_HIGHEST_RESOLUTION_BUTTON:
                 yt = YouTube(url=url, on_complete_callback=partial(callback_for_video_download, update=update))
-                yt.streams.get_highest_resolution.download(output_path=DOWNLOAD_DIRECTORY)
+                yt.streams.get_highest_resolution.download(output_path=DOWNLOAD_DIRECTORY)            
         except Exception as e:
             update.message.reply_text(static_text.video_is_unavailable)
             continue
     update.message.reply_text(text=static_text.all_playlist_is_downloaded_text, reply_markup=ReplyKeyboardRemove())
     context.user_data.clear()
     return ConversationHandler.END
-
+    
 
 def get_author_and_title(url: str) -> Tuple[str, str]:
     yt = YouTube(url)
