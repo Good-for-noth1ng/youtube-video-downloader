@@ -82,6 +82,7 @@ def setup_dispatcher(dp):
         )
     )
 
+
     dp.add_handler(ConversationHandler(
             entry_points=[
                 CommandHandler("search", search_handler.ask_query)
@@ -99,6 +100,7 @@ def setup_dispatcher(dp):
             ], 
         )
     )
+
 
     dp.add_error_handler(error.sent_tracebak_into_chat)
     return dp
