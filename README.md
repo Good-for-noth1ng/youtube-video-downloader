@@ -10,12 +10,9 @@ Telegram bot (django + python-telegram-bot)
 * `/start` - start bot
 * `/download` - download video or playlist by url
 * `/search` - search for videos and download them
-
-Bot description: <br>
+* Bot description: <br>
 ![start](/.github/img/ex1.jpg)
-
-Bot description: <br>
+* Search result: <br>
 ![search result](/.github/img/ex2.jpg)
-
-Bot description: <br>
+* Downloading search results: <br>
 ![downloading search results](/.github/img/ex3.jpg)
