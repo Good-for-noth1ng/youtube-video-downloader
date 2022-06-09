@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Union, Optional, Tuple
 
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Manager, QuerySet
 from telegram import Update
 from telegram.ext import CallbackContext
@@ -80,8 +81,8 @@ class User(CreateUpdateTracker):
         """ Search user in DB, return User or None if not found """
         username = str(username_or_user_id).replace("@", "").strip().lower()
         if username.isdigit():  # user_id
-            return cls.objects.filter(user_id=int(user_name)).first()
-        return cls.objects.filter(username__iexact=user_name).first()
+            return cls.objects.filter(user_id=int(username)).first()
+        return cls.objects.filter(username__iexact=username).first()
 
     @property
     def invited_users(self) -> QuerySet[User]:
@@ -90,7 +91,7 @@ class User(CreateUpdateTracker):
     @property
     def tg_str(self) -> str:
         if self.user_name:
-            return f'@{self.username}'
+            return f'@{self.user_name}'
         return f"{self.first_name} {self.last_name}" if self.last_name else f"{self.first_name}"
 
     @property
