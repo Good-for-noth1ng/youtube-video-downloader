@@ -31,6 +31,7 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
+    'x%#3&%giwv8f0+%r946en7z&d@9*rc$sl0qoql56xr%bh^w2mj'
 )
 
 if os.environ.get('DJANGO_DEBUG', default=False) in ['True', 'true', '1', True]:
@@ -67,6 +68,12 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'django.middleware.common.CommonMiddleware',
+]
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
 ]
 
 ROOT_URLCONF = 'video_download.urls'
