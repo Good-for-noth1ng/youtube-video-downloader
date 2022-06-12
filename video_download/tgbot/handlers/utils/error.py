@@ -10,19 +10,6 @@ from telegram.ext import CallbackContext
 from tgbot.models import User
 from video_download.settings import TELEGRAM_LOGS_CHAT_ID
 
-def setup_logging_for_file(user_id, message):
-    logging.basicConfig(
-        filename="error.log", 
-        filemode="a", 
-        level=logging.ERROR, 
-        format='%(asctime)s -  %(user_id)s - %(message)s'
-    )
-    logging.error(message)
-
-def setup_logging_for_console(message):
-    logging.basicConfig(level=logging.ERROR, format='%(asctime)s -  %(user_id)s - %(message)s')
-    logging.error(message)
-
 def sent_tracebak_into_chat(update: Update, context: CallbackContext):
     u = User.get_user(update, context)
     logging.error("Exception while handling an update:", exc_info=context.error)
@@ -47,11 +34,11 @@ def sent_tracebak_into_chat(update: Update, context: CallbackContext):
     
     admin_message = f"⚠️⚠️⚠️ for {u.tg_str}:\n{message}"[:4090]
     
-    # if TELEGRAM_LOGS_CHAT_ID:
-    #     context.bot.send_message(
-    #         chat_id=TELEGRAM_LOGS_CHAT_ID,
-    #         text=admin_message,
-    #         parse_mode=telegram.ParseMode.HTML,
-    #     )
-    # else:
-    #     logging.error(admin_message)
+    if TELEGRAM_LOGS_CHAT_ID:
+        context.bot.send_message(
+            chat_id=TELEGRAM_LOGS_CHAT_ID,
+            text=admin_message,
+            parse_mode=telegram.ParseMode.HTML,
+        )
+    else:
+        logging.error(admin_message)
