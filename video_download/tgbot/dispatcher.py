@@ -116,7 +116,7 @@ def run_pooling():
         listen="0.0.0.0", 
         port=PORT, 
         url_path=TELEGRAM_TOKEN,
-        webhook_url='https://' + HEROKU_APP_NAME +'.herokuapp.com/' + TELEGRAM_TOKEN
+        webhook_url='https://' + HEROKU_APP_NAME +'.herokuapp.com/'
     )
     
     #Run in pooling mode
