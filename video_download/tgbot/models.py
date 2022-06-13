@@ -70,6 +70,7 @@ class User(CreateUpdateTracker):
                     u.save()
         return u, created
 
+
     @classmethod
     def get_user(cls, update: Update, context: CallbackContext) -> User:
         """Gets user from db"""

@@ -4,9 +4,6 @@ from typing import Dict, Callable
 import telegram
 from telegram import Update
 
-def send_typing_action(func: Callable):
-    pass
-
 def extract_user_data_from_update(update: Update):
     if update.message is not None:
         user = update.message.from_user.to_dict()
