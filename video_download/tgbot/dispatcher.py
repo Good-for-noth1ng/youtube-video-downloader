@@ -50,7 +50,7 @@ def setup_dispatcher(dp):
                         Filters.regex(r'^https:\/\/youtu.be\/.*'), 
                         download_handler.extract_video_format_and_quality
                     ),
-                    MessageHandler(Filters.all, download_handler.not_youtube_domain)
+                    MessageHandler(Filters.all & ~Filters.command, download_handler.not_youtube_domain)
                 ],
                 download_cs.ASK_QUALITY_FOR_PLAYLIST_STATE: [
                     MessageHandler(
