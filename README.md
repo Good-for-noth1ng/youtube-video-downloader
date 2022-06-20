@@ -1,5 +1,5 @@
 # Youtube video downloader
-Telegram bot (django + python-telegram-bot)
+Telegram bot (django + python-telegram-bot) @Youtube_extractor_bot
 
 ## Features
 
