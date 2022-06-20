@@ -3,8 +3,9 @@ Telegram bot (django + python-telegram-bot)
 
 ## Features
 
-* db - SQLite
-* Native telegram commands 
+* db - PostgreSQL
+* Native telegram commands
+* Pytube 
 
 ## Built-in methods
 * `/start` - start bot
