@@ -44,7 +44,6 @@ def extract_video_format_and_quality(update: Update, context: CallbackContext) -
         )
         return conversation_state.ASK_QUALITY_STATE
 
-    
 def check_available_video_resolution(url: str) -> List[str]:
     available_video_resolution = []
     yt = YouTube(url=url)
