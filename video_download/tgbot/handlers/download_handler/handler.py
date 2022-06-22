@@ -3,10 +3,10 @@ from pathlib import Path
 from functools import partial
 from typing import List, Dict, Tuple
 
-from youtube_crawler.pytube.__main__ import YouTube
-from youtube_crawler.pytube.contrib.playlist import Playlist
 from telegram import ParseMode, ReplyKeyboardRemove, Update
 from telegram.ext import CallbackContext, ConversationHandler
+from youtube_crawler.pytube.__main__ import YouTube
+from youtube_crawler.pytube.contrib.playlist import Playlist
 
 import tgbot.handlers.download_handler.conversation_state as conversation_state
 import tgbot.handlers.download_handler.static_text as static_text
