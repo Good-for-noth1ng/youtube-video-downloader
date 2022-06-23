@@ -13,7 +13,6 @@ import tgbot.handlers.download_handler.static_text as static_text
 import tgbot.handlers.download_handler.keyboards as keyboards
 from tgbot.handlers.utils.const import DOWNLOAD_DIRECTORY
 
-
 def ask_put_url(update: Update, context: CallbackContext) -> str:
     update.message.reply_text(
         text=static_text.send_url_text, 
