@@ -1,3 +1,3 @@
 release: python video_download/manage.py migrate --noinput
-web: python3 video_download/run_pooling.py 
+web: gunicorn gettingstarted.wsgi 
 worker: python3 video_download/run_pooling.py
