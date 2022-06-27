@@ -88,7 +88,6 @@ def get_author_and_title(url: str) -> Tuple[str, str]:
     yt = YouTube(url)
     return yt.author, yt.title
 
-
 def download(update: Update, context: CallbackContext):
     resolution = update.message.text
     url = context.user_data["url"]
