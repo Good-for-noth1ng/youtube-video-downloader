@@ -5,6 +5,8 @@ import telegram
 from telegram import Update
 
 def extract_user_data_from_update(update: Update):
+    if update.callback_query.message is not None:
+        update.callback_query.message.from_user.to_dict()
     if update.message is not None:
         user = update.message.from_user.to_dict()
     elif update.inline_query is not None:

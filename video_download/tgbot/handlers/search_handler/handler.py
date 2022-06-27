@@ -110,7 +110,7 @@ def callback_for_audio_download(stream: YouTube, path_to_audio: Path, update: Up
     update.callback_query.edit_message_text(text=download_st.download_is_sucessful_text)
     with open(path_to_audio, 'rb') as audio:
         update.callback_query.message.reply_audio(
-            audio, 
+            audio,
             performer=author, 
             title=title
         )
