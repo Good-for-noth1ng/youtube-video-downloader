@@ -83,7 +83,6 @@ def setup_dispatcher(dp):
         )
     )
 
-
     dp.add_handler(ConversationHandler(
             entry_points=[
                 CommandHandler("search", search_handler.ask_query)
