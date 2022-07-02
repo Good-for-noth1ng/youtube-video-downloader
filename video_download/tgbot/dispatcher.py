@@ -44,11 +44,11 @@ def setup_dispatcher(dp):
                         download_handler.extract_video_format_and_quality
                     ),
                     MessageHandler(
-                        Filters.regex(r'^https:\/\/m.youtube\.com\/.*'), 
+                        Filters.regex(r'^https:\/\/m\.youtube\.com\/.*'), 
                         download_handler.extract_video_format_and_quality
                     ),
                     MessageHandler(
-                        Filters.regex(r'^https:\/\/youtu.be\/.*'), 
+                        Filters.regex(r'^https:\/\/youtu\.be\/.*'), 
                         download_handler.extract_video_format_and_quality
                     ),
                     MessageHandler(Filters.all & ~Filters.command, download_handler.not_youtube_domain)
