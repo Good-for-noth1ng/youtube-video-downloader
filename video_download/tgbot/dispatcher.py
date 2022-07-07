@@ -23,6 +23,9 @@ from tgbot.handlers.download_handler import static_text as download_st
 from tgbot.handlers.search_handler import conversation_state as search_cs
 from tgbot.handlers.search_handler import handler as search_handler
 
+from tgbot.handlers.channel_handler import conversation_states as channel_cs
+from tgbot.handlers.channel_handler import handler as channel_handler
+
 VIDEO_RESOLUTION_FORMATS = [
     "144p", "360p", "240p", "480p", "720p", "1080p"
 ]
@@ -101,6 +104,31 @@ def setup_dispatcher(dp):
         )
     )
 
+    dp.add_handler(ConversationHandler(
+            entry_points=[
+                CommandHandler("channel", channel_handler.ask_channel)
+            ], 
+            states={
+                channel_cs.SEND_CHANNEL_STATE: [
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/youtube\.com\/.*'), 
+                        channel_handler.extract_channel_video
+                    ),
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/m\.youtube\.com\/.*'), 
+                        channel_handler.extract_channel_video
+                    ),
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/youtu\.be\/.*'), 
+                        channel_handler.extract_channel_video
+                    ),
+                    MessageHandler(Filters.all & ~Filters.command, download_handler.not_youtube_domain)
+                ]
+            }, 
+            fallbacks=[]
+        )
+    )
+
     dp.add_error_handler(error.sent_tracebak_into_chat)
     return dp
 
@@ -112,18 +140,18 @@ def run_pooling():
     dp = setup_dispatcher(dp)
 
     #Run with webhook
-    updater.start_webhook(
-        listen="0.0.0.0", 
-        port=PORT, 
-        url_path=TELEGRAM_TOKEN,
-        webhook_url='https://' + HEROKU_APP_NAME + '.herokuapp.com/' + TELEGRAM_TOKEN
-    )
+    # updater.start_webhook(
+    #     listen="0.0.0.0", 
+    #     port=PORT, 
+    #     url_path=TELEGRAM_TOKEN,
+    #     webhook_url='https://' + HEROKU_APP_NAME + '.herokuapp.com/' + TELEGRAM_TOKEN
+    # )
     
     #Run in pooling mode
-    # bot_info = Bot(TELEGRAM_TOKEN).get_me()
-    # bot_link = f"https://t.me/" + bot_info["username"]
-    # print(f"Pooling of '{bot_link}' started")
-    # updater.start_polling()
+    bot_info = Bot(TELEGRAM_TOKEN).get_me()
+    bot_link = f"https://t.me/" + bot_info["username"]
+    print(f"Pooling of '{bot_link}' started")
+    updater.start_polling()
 
     updater.idle()
 
@@ -145,12 +173,14 @@ def set_up_commands(bot_instance: Bot) -> None:
         'en': {
             'start': 'Bot informations 🚀',
             'download': 'Download video 🕹️',
-            'search': 'Search for video 🔍'
+            'search': 'Search for video 🔍',
+            'channel': 'Channel video 🎥'
         },
         'ru': {
             'start': 'Узнать о боте 🚀',
             'download': 'Скачать видео 🕹️',
-            'search': 'Найти видео 🔍'
+            'search': 'Найти видео 🔍',
+            'channel': 'Видео канала 🎥'
         }
     }
     

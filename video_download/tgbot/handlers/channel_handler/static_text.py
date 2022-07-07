@@ -1,0 +1,1 @@
+send_chanel_url_text = "Отправь url канала"

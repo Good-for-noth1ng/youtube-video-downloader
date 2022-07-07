@@ -39,7 +39,7 @@ def search_by_query(update: Update, context: CallbackContext):
         video_title = result.title
         video_author = result.author
         video_length = get_video_length(result.length)
-        message_text = f"🧑 {video_author}: ▶️ {video_title}, 🕐 {video_length}"
+        message_text = f"🎥 {video_author}: ▶️ {video_title}, 🕐 {video_length}"
         update.message.reply_text(
             text=message_text, 
             reply_markup=keyboards.make_keyboard_to_ask_video(video_id=video_id)
