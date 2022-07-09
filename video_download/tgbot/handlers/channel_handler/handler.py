@@ -12,6 +12,7 @@ def ask_channel(update: Update, context: CallbackContext):
 
 def extract_channel_video(update: Update, context: CallbackContext):
     url: str = update.message.text
-    channels = Channel(url)
-    for channel in channels:
-        pass
+    channel = Channel(url)
+    for video in channel.videos:
+        print(video.author, video.title)
+    

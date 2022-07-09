@@ -125,7 +125,9 @@ def setup_dispatcher(dp):
                     MessageHandler(Filters.all & ~Filters.command, download_handler.not_youtube_domain)
                 ]
             }, 
-            fallbacks=[]
+            fallbacks=[
+                MessageHandler(Filters.command, search_handler.stop)
+            ]
         )
     )
 
