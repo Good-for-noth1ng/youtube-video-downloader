@@ -104,35 +104,35 @@ def setup_dispatcher(dp):
         )
     )
 
-    # dp.add_handler(ConversationHandler(
-    #         entry_points=[
-    #             CommandHandler("channel", channel_handler.ask_channel)
-    #         ], 
-    #         states={
-    #             channel_cs.SEND_CHANNEL_STATE: [
-    #                 MessageHandler(
-    #                     Filters.regex(r'^https:\/\/youtube\.com\/.*'), 
-    #                     channel_handler.extract_channel_video
-    #                 ),
-    #                 MessageHandler(
-    #                     Filters.regex(r'^https:\/\/m\.youtube\.com\/.*'), 
-    #                     channel_handler.extract_channel_video
-    #                 ),
-    #                 MessageHandler(
-    #                     Filters.regex(r'^https:\/\/youtu\.be\/.*'), 
-    #                     channel_handler.extract_channel_video
-    #                 ),
-    #                 MessageHandler(Filters.all & ~Filters.command, download_handler.not_youtube_domain)
-    #             ],
-    #             channel_cs.ASK_QUALITY_CHANNEL_VIDEO: [
+    dp.add_handler(ConversationHandler(
+            entry_points=[
+                CommandHandler("channel", channel_handler.ask_channel)
+            ], 
+            states={
+                channel_cs.SEND_CHANNEL_STATE: [
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/youtube\.com\/.*'), 
+                        channel_handler.extract_channel_video
+                    ),
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/m\.youtube\.com\/.*'), 
+                        channel_handler.extract_channel_video
+                    ),
+                    MessageHandler(
+                        Filters.regex(r'^https:\/\/youtu\.be\/.*'), 
+                        channel_handler.extract_channel_video
+                    ),
+                    MessageHandler(Filters.all & ~Filters.command, download_handler.not_youtube_domain)
+                ],
+                channel_cs.ASK_QUALITY_CHANNEL_VIDEO: [
 
-    #             ]
-    #         }, 
-    #         fallbacks=[
-    #             MessageHandler(Filters.command, search_handler.stop)
-    #         ]
-    #     )
-    # )
+                ]
+            }, 
+            fallbacks=[
+                MessageHandler(Filters.command, search_handler.stop)
+            ]
+        )
+    )
 
     dp.add_error_handler(error.sent_tracebak_into_chat)
     return dp
