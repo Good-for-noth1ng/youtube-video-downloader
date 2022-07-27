@@ -3,7 +3,7 @@ import logging
 from typing import Dict
 
 import telegram.error
-from telegram import Bot, Update, BotCommand
+from telegram import Update, BotCommand
 
 from telegram.ext import (
     Updater, Dispatcher,
